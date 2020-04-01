@@ -1,0 +1,66 @@
+body {background: #2e2e2e;}
+
+p.btn_cont {
+	margin-top: 100px;
+}
+
+.btn {
+  text-decoration: none;
+  outline: none;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding-top: 20px;
+  width: 400px;
+  height: 70px;
+  line-height: 45px;
+  border-radius: 45px;
+  vertical-align: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 30px;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 2px;
+  font-weight: 600;
+  color: white;
+  background: #2e2e2e;
+  box-shadow: 0 10px 15px rgba(0,0,0,.1);
+  transition: .3s;
+  
+}
+.btn:hover {
+  background: #424242;
+  box-shadow: 0 15px 20px rgba(0, 0, 0, .5);
+  color: white;
+  transform: translateY(-7px);
+}
+
+.banner {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 40px;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 2px;
+  font-weight: 600;
+  color: white;
+}
+
+@media (max-width: 1200px) {
+	
+	.btn {
+		width: 70%;
+		height: 80px;
+		font-size: 30px;
+		padding-top: 30px;
+		
+	}
+	
+	.banner {
+		width: 90%;
+		text-align: center;
+		margin: auto;
+		font-size: 40px;
+	}
+}

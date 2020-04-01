@@ -2,12 +2,14 @@ from flask import Flask
 from flask_login import LoginManager, login_required, logout_user
 from flask_restful import Api
 from werkzeug.utils import redirect
+from flask import render_template
 
 from data import db_session
 from data.users import User
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'af1f2ed264b7a6b18b84971091cbaceea33697bf3b80ad5cd495898c8ced0a2d09b1e8012a0b00868f5d6b6500a2cee7e591fbc2dd88f3f9a4caa2239d4576ac'
+app.config['SECRET_KEY'] = 'af1f2ed264b7a6b18b84971091cbaceea33697bf3b80ad5cd495898c8ced0a2d09b1e8012a0' \
+                           'b00868f5d6b6500a2cee7e591fbc2dd88f3f9a4caa2239d4576ac'
 api = Api(app)
 
 login_manager = LoginManager()
@@ -27,9 +29,14 @@ def logout():
     return redirect("/")
 
 
+@app.route('/start')
+def start():
+    return render_template("main.html")
+
+
 def main():
     db_session.global_init("db/passwords.sqlite")
-    app.run()
+    app.run(port=5000, host='127.0.0.1')
 
 
 if __name__ == '__main__':
