@@ -10,6 +10,3 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     nick = sqlalchemy.Column(sqlalchemy.String)
     email = sqlalchemy.Column(sqlalchemy.String, unique=True)
     hashed_password = sqlalchemy.Column(sqlalchemy.String)
-
-    def sn(self):
-        return self.surname + ' ' + self.name
