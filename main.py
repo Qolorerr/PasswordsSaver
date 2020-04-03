@@ -32,6 +32,7 @@ def logout():
     return redirect("/")
 
 
+# Когда сделаем регистрацию и вход, надо будет добавить сюда @login_required
 @app.route('/start')
 def start():
     response = make_response(render_template("main.html", version=random.randint(0, 10 ** 5)))
@@ -42,7 +43,7 @@ def start():
 
 def main():
     db_session.global_init("db/passwords.sqlite")
-    app.run(port=5000, host='192.168.1.114')
+    app.run(port=5000, host='127.0.0.1')
 
 
 if __name__ == '__main__':
