@@ -10,7 +10,7 @@ p.btn_cont {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 10px;
+  margin-top: 15px;
   margin-bottom: 10px;
   padding-top: 20px;
   width: 400px;
@@ -25,10 +25,9 @@ p.btn_cont {
   letter-spacing: 2px;
   font-weight: 600;
   color: white;
-  background: #2e2e2e;
+  background: #323232;
   box-shadow: 0 10px 15px rgba(0,0,0,.1);
   transition: .3s;
-  
 }
 .btn:hover {
   background: #424242;
@@ -48,19 +47,20 @@ p.btn_cont {
 }
 
 @media (max-width: 1200px) {
-	
 	.btn {
-		width: 70%;
-		height: 80px;
-		font-size: 30px;
-		padding-top: 30px;
-		
+		width: 80%;
+		margin-top: 8%;
+		height: 110px;
+		border-radius: 70px;
+		font-size: 50px;
+		padding-top: 55px;
+		text-align: center;
 	}
-	
 	.banner {
 		width: 90%;
 		text-align: center;
 		margin: auto;
-		font-size: 40px;
+		margin-top: 7%;
+		font-size: 65px;
 	}
 }
