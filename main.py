@@ -1,11 +1,13 @@
 from flask import Flask
-from flask_login import LoginManager, login_required, logout_user
+from flask_login import LoginManager, login_required, logout_user, login_user
 from flask_restful import Api
 from werkzeug.utils import redirect
 from flask import render_template
 from flask import make_response
 
 from data import db_session
+from data.login_form import LoginForm
+from data.register_form import RegisterForm
 from data.users import User
 
 import random
@@ -23,6 +25,51 @@ login_manager.init_app(app)
 def load_user(user_id):
     session = db_session.create_session()
     return session.query(User).get(user_id)
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        session = db_session.create_session()
+        user = session.query(User).filter(User.login == form.login.data).first()
+        if user is not None:
+            return render_template('register.html',
+                                   message="This login already used",
+                                   form=form)
+        user = session.query(User).filter(User.email == form.email.data).first()
+        if user is not None:
+            return render_template('register.html',
+                                   message="This email already used",
+                                   form=form)
+        if form.password.data != form.password_rep.data:
+            return render_template('register.html',
+                                   message="Passwords don't match",
+                                   form=form)
+        user = User()
+        user.login = form.login.data
+        user.email = form.email.data
+        user.hashed_password = user.hash(form.password.data)
+        session.add(user)
+        session.commit()
+        login_user(user, remember=False)
+        return redirect("/")
+    return render_template('register.html', title='Authorisation', form=form)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        session = db_session.create_session()
+        user = session.query(User).filter((User.login == form.login.data) | (User.email == form.login.data)).first()
+        if user and user.check_password(form.password.data):
+            login_user(user, remember=form.remember_me.data)
+            return redirect("/")
+        return render_template('login.html',
+                               message="Wrong login or password",
+                               form=form)
+    return render_template('login.html', title='Authorisation', form=form)
 
 
 @app.route('/logout')
