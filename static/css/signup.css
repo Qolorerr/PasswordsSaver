@@ -71,12 +71,12 @@ body{
 .signup::before {
 	display: block;
 	position: relative;
-	height: 2px;
+	height: 3px;
 	background: rgb(52, 56, 61);
 	content: '';
 	top: 60px;
-	margin-right: 45px;
-	margin-left: -30px;
+	margin-right: 50px;
+	margin-left: -50px;
 	z-index: 1;
 }
 .signup input:first-of-type{

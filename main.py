@@ -27,23 +27,23 @@ def load_user(user_id):
     return session.query(User).get(user_id)
 
 
-@app.route('/register', methods=['GET', 'POST'])
+@app.route('/signup', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
         session = db_session.create_session()
         user = session.query(User).filter(User.login == form.login.data).first()
         if user is not None:
-            return render_template('register.html',
+            return render_template('signup.html',
                                    message="This login already used",
                                    form=form)
         user = session.query(User).filter(User.email == form.email.data).first()
         if user is not None:
-            return render_template('register.html',
+            return render_template('signup.html',
                                    message="This email already used",
                                    form=form)
         if form.password.data != form.password_rep.data:
-            return render_template('register.html',
+            return render_template('signup.html',
                                    message="Passwords don't match",
                                    form=form)
         user = User()
@@ -54,7 +54,7 @@ def register():
         session.commit()
         login_user(user, remember=False)
         return redirect("/")
-    return render_template('register.html', title='Authorisation', form=form)
+    return render_template('signup.html', title='Authorisation', form=form, version=random.randint(0, 10 ** 5))
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -83,22 +83,6 @@ def logout():
 @app.route('/start')
 def start():
     response = make_response(render_template("main.html", version=random.randint(0, 10 ** 5)))
-    response.headers['Cache-Control'] = 'no-cache, no-store'
-    response.headers['Pragma'] = 'no-cache'
-    return response
-
-
-@app.route('/login')
-def login():
-    response = make_response(render_template("login.html", version=random.randint(0, 10 ** 5)))
-    response.headers['Cache-Control'] = 'no-cache, no-store'
-    response.headers['Pragma'] = 'no-cache'
-    return response
-
-
-@app.route('/signup')
-def signup():
-    response = make_response(render_template("signup.html", version=random.randint(0, 10 ** 5)))
     response.headers['Cache-Control'] = 'no-cache, no-store'
     response.headers['Pragma'] = 'no-cache'
     return response
