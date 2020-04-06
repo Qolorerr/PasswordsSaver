@@ -47,6 +47,9 @@ p.btn_cont {
 }
 
 @media (max-width: 1200px) {
+    p.btn_cont{
+        margin-top: 40%;
+    }
 	.btn {
 		width: 80%;
 		margin-top: 8%;
