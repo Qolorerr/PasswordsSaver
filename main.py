@@ -88,6 +88,22 @@ def start():
     return response
 
 
+@app.route('/login')
+def login():
+    response = make_response(render_template("login.html", version=random.randint(0, 10 ** 5)))
+    response.headers['Cache-Control'] = 'no-cache, no-store'
+    response.headers['Pragma'] = 'no-cache'
+    return response
+
+
+@app.route('/signup')
+def signup():
+    response = make_response(render_template("signup.html", version=random.randint(0, 10 ** 5)))
+    response.headers['Cache-Control'] = 'no-cache, no-store'
+    response.headers['Pragma'] = 'no-cache'
+    return response
+
+
 def main():
     db_session.global_init("db/passwords.sqlite")
     app.run(port=5000, host='127.0.0.1')
