@@ -104,11 +104,6 @@ body{
   color: white;
   transform: translateY(-7px);
 }
-#signin button[type="submit"]:hover{
-	color: rgb(0, 126, 165);
-	text-shadow: 0 0 10px rgb(0, 126, 165);
-	cursor: pointer;
-}
 #signin p {
 	color: rgb(79, 85, 97);
 	padding: 0 20px;
@@ -200,11 +195,6 @@ body{
 	font-size: 50px;
 	padding-top: 55px;
 	text-align: center;
-}
-#signin button[type="submit"]:hover{
-	color: rgb(0, 126, 165);
-	text-shadow: 0 0 10px rgb(0, 126, 165);
-	cursor: pointer;
 }
 #signin p {
 	color: rgb(79, 85, 97);

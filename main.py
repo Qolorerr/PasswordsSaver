@@ -34,16 +34,16 @@ def register():
         session = db_session.create_session()
         user = session.query(User).filter(User.login == form.login.data).first()
         if user is not None:
-            return render_template('signup.html',
+            return render_template('register.html',
                                    message="This login already used",
                                    form=form)
         user = session.query(User).filter(User.email == form.email.data).first()
         if user is not None:
-            return render_template('signup.html',
+            return render_template('register.html',
                                    message="This email already used",
                                    form=form)
         if form.password.data != form.password_rep.data:
-            return render_template('signup.html',
+            return render_template('register.html',
                                    message="Passwords don't match",
                                    form=form)
         user = User()
@@ -54,7 +54,7 @@ def register():
         session.commit()
         login_user(user, remember=False)
         return redirect("/")
-    return render_template('signup.html', title='Authorisation', form=form, version=random.randint(0, 10 ** 5))
+    return render_template('register.html', title='Authorisation', form=form, version=random.randint(0, 10 ** 5))
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -69,7 +69,7 @@ def login():
         return render_template('login.html',
                                message="Wrong login or password",
                                form=form)
-    return render_template('login.html', title='Authorisation', form=form)
+    return render_template('login.html', title='Authorisation', form=form, version=random.randint(0, 10 ** 5))
 
 
 @app.route('/logout')
@@ -90,7 +90,7 @@ def start():
 
 def main():
     db_session.global_init("db/passwords.sqlite")
-    app.run(port=5000, host='127.0.0.1')
+    app.run(port=5000, host='192.168.1.114')
 
 
 if __name__ == '__main__':

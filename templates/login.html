@@ -1,20 +1,33 @@
 <!DOCTYPE html>
-<html >
 <head>
-  <meta charset="UTF-8">
-  <title>Log In - PasswordsSaver</title>
-      <link rel="stylesheet" type="text/css" href="static/css/login.css? update = {{ version }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Log In - PasswordsSaver</title>
+        <link rel="stylesheet" type="text/css" href="static/css/signup.css? update = {{ version }}">
 </head>
-
 <body>
-  <p><h1 class="banner">Log in</h1></p>
-<p><div id="wrapper">
-	<form id="signin" method="" action="" autocomplete="off">
-		<input type="text" id="user" placeholder="username" />
-		<input type="password" id="pass" placeholder="password" />
-		<p><a href="#">I forgot password</a><a class="signup" href="signup">Sign Up</a></p>
-	</form>
-</div></p>
-<div class="btn_cont"><a class="btn" type="submit">login</a></div>
+<h5 class="banner">Sign Up</h5>
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    <div class="input_cont">
+    <p>
+        {{ form.login(class="form", method="", action="", autocomplete="off", type="text", id="name", placeholder="username") }}<br>
+        {% for error in form.login.errors %}
+            <div>
+                {{ error }}
+            </div>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.password(class="form", method="", action="", autocomplete="off", type="password", id="pass", placeholder="password") }}<br>
+        {% for error in form.password.errors %}
+            <div>
+                {{ error }}
+            </div>
+        {% endfor %}
+    </p>
+    </div>
+    <p class="btn_cont">{{ form.submit(type="submit", class="btn")}}</p>
+    <div>{{ message }}</div>
+</form>
 </body>
-</html>
