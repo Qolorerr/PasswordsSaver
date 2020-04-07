@@ -53,7 +53,7 @@ def register():
         session.add(user)
         session.commit()
         login_user(user, remember=False)
-        return redirect("/")
+        return redirect("/start")
     return render_template('register.html', title='Authorisation', form=form, version=random.randint(0, 10 ** 5))
 
 
@@ -65,7 +65,7 @@ def login():
         user = session.query(User).filter((User.login == form.login.data) | (User.email == form.login.data)).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
-            return redirect("/")
+            return redirect("/start")
         return render_template('login.html',
                                message="Wrong login or password",
                                form=form)
@@ -90,7 +90,7 @@ def start():
 
 def main():
     db_session.global_init("db/passwords.sqlite")
-    app.run(port=5000, host='192.168.1.114')
+    app.run(port=5000, host='127.0.0.1')
 
 
 if __name__ == '__main__':
