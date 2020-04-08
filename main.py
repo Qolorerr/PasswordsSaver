@@ -79,8 +79,8 @@ def logout():
     return redirect("/")
 
 
-# Когда сделаем регистрацию и вход, надо будет добавить сюда @login_required
 @app.route('/start')
+@login_required
 def start():
     response = make_response(render_template("main.html", version=random.randint(0, 10 ** 5)))
     response.headers['Cache-Control'] = 'no-cache, no-store'
