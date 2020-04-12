@@ -36,16 +36,19 @@ def register():
         if user is not None:
             return render_template('register.html',
                                    message="This login already used",
-                                   form=form)
+                                   form=form,
+                                   version=random.randint(0, 10 ** 5))
         user = session.query(User).filter(User.email == form.email.data).first()
         if user is not None:
             return render_template('register.html',
                                    message="This email already used",
-                                   form=form)
+                                   form=form,
+                                   version=random.randint(0, 10 ** 5))
         if form.password.data != form.password_rep.data:
             return render_template('register.html',
                                    message="Passwords don't match",
-                                   form=form)
+                                   form=form,
+                                   version=random.randint(0, 10 ** 5))
         user = User()
         user.login = form.login.data
         user.email = form.email.data
@@ -68,7 +71,8 @@ def login():
             return redirect("/start")
         return render_template('login.html',
                                message="Wrong login or password",
-                               form=form)
+                               form=form,
+                               version=random.randint(0, 10 ** 5))
     return render_template('login.html', title='Authorisation', form=form, version=random.randint(0, 10 ** 5))
 
 

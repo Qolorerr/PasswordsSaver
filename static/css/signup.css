@@ -7,6 +7,13 @@ body{
     margin: 30px auto;
 }
 
+.message {
+    color: red;
+    margin: auto;
+    margin-top: 15px;
+    text-align: center;
+}
+
 .btn {
   border: 0px solid;
   margin: auto;

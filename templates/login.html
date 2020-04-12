@@ -13,7 +13,7 @@
     <p>
         {{ form.login(class="form", method="", action="", autocomplete="off", type="text", id="name", placeholder="username") }}<br>
         {% for error in form.login.errors %}
-            <div>
+            <div class="message">
                 {{ error }}
             </div>
         {% endfor %}
@@ -21,13 +21,13 @@
     <p>
         {{ form.password(class="form", method="", action="", autocomplete="off", type="password", id="pass", placeholder="password") }}<br>
         {% for error in form.password.errors %}
-            <div>
+            <div class="message">
                 {{ error }}
             </div>
         {% endfor %}
     </p>
     </div>
     <p class="btn_cont">{{ form.submit(type="submit", class="btn")}}</p>
-    <div>{{ message }}</div>
+    <div class="message">{{ message }}</div>
 </form>
 </body>
