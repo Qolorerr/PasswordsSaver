@@ -1,13 +1,16 @@
 from flask import Flask
-from flask_login import LoginManager, login_required, logout_user, login_user
+from flask_login import LoginManager, login_required, logout_user, login_user, current_user
 from flask_restful import Api
 from werkzeug.utils import redirect
 from flask import render_template
 from flask import make_response
 
 from data import db_session
+from data.add_pass_form import AddPasswordForm
 from data.login_form import LoginForm
+from data.passwords import Password
 from data.register_form import RegisterForm
+from data.tags import Tag
 from data.users import User
 
 import random
@@ -74,6 +77,34 @@ def login():
                                form=form,
                                version=random.randint(0, 10 ** 5))
     return render_template('login.html', title='Authorisation', form=form, version=random.randint(0, 10 ** 5))
+
+
+@app.route('/add_pass', methods=['GET', 'POST'])
+@login_required
+def add_pass():
+    form = AddPasswordForm()
+    if form.validate_on_submit():
+        session = db_session.create_session()
+        tags_id = []
+        for tag in form.tags.data.split():
+            old_tag_id = session.query(Tag).filter(Tag.tag == tag).first()
+            if old_tag_id is None:
+                new_tag = Tag()
+                new_tag.tag = tag
+                session.add(new_tag)
+                session.commit()
+                tags_id.append(session.query(Tag).filter(Tag.tag == tag).first())
+            else:
+                tags_id.append(old_tag_id)
+        password = Password()
+        password.user_id = current_user.id
+        password.site = form.site.data
+        password.hashed_password = form.password.data
+        password.tags_id = ' '.join([str(i) for i in tags_id])
+        session.add(password)
+        session.commit()
+        return redirect('/start')
+    return render_template('add_pass.html', title='Add password', form=form, version=random.randint(0, 10 ** 5))
 
 
 @app.route('/logout')
