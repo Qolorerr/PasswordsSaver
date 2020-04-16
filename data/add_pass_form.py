@@ -7,4 +7,4 @@ class AddPasswordForm(FlaskForm):
     site = StringField('Site', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     tags = StringField('Tags')
-    submit = SubmitField('Add')
+    submit = SubmitField('Add password')

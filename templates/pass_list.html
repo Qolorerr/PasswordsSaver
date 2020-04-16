@@ -4,17 +4,13 @@
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>List of passwords - PasswordsSaver</title>
-<link rel="stylesheet" type="text/css" href="static/css/pass_list.css? update = {{ version }}">
+<link rel="stylesheet" type="text/css" href="static/css/signup.css? update = {{ version }}">
 </head>
 <body>
 <p>
     <h4 class="banner">Your passwords</h4></p>
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-<p>
-<form action="">
-  <input type="search">
-  <i class="fa fa-search"></i>
-</form>
-</p>
+<form action="" method="post"><p>
+    <div class="input_cont">{{ form.tags(class="form", method="", action="", autocomplete="off", type="text", id="name", placeholder="enter tags and press enter")}}</div>
+</p></form>
 </body>
 </html>

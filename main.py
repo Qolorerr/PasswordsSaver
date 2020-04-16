@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_login import LoginManager, login_required, logout_user, login_user, current_user
 from flask_restful import Api
 from werkzeug.utils import redirect
@@ -12,6 +12,7 @@ from data.passwords import Password
 from data.register_form import RegisterForm
 from data.tags import Tag
 from data.users import User
+from data.search_password_form import SearchForm
 
 import random
 
@@ -79,7 +80,7 @@ def login():
     return render_template('login.html', title='Authorisation', form=form, version=random.randint(0, 10 ** 5))
 
 
-@app.route('/add_pass', methods=['GET', 'POST'])
+@app.route('/add_password', methods=['GET', 'POST'])
 @login_required
 def add_pass():
     form = AddPasswordForm()
@@ -121,6 +122,15 @@ def start():
     response.headers['Cache-Control'] = 'no-cache, no-store'
     response.headers['Pragma'] = 'no-cache'
     return response
+
+
+@app.route('/passwords_list', methods=['GET', 'POST'])
+@login_required
+def password_list():
+    form = SearchForm()
+    if form.validate():
+        tags = form.tags.data.split()
+    return render_template('pass_list.html', form=form, version=random.randint(0, 10 ** 5))
 
 
 def main():
