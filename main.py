@@ -9,6 +9,7 @@ from data import db_session
 from data.add_pass_form import AddPasswordForm
 from data.login_form import LoginForm
 from data.passwords import Password
+from data.profile_form import ProfileForm
 from data.register_form import RegisterForm
 from data.tags import Tag
 from data.users import User
@@ -64,6 +65,45 @@ def register():
     return render_template('register.html', title='Authorisation', form=form, version=random.randint(0, 10 ** 5))
 
 
+@app.route('/profile', methods=['GET', 'POST'])
+def profile():
+    form = ProfileForm()
+    if form.validate_on_submit():
+        session = db_session.create_session()
+        if current_user.hash(form.password.data) != current_user.hashed_password:
+            return render_template('profile.html',
+                                   message="Wrong old password",
+                                   form=form,
+                                   version=random.randint(0, 10 ** 5))
+        user = session.query(User).filter(User.login == form.login.data).first()
+        if user is not None:
+            return render_template('profile.html',
+                                   message="This login already used",
+                                   form=form,
+                                   version=random.randint(0, 10 ** 5))
+        user = session.query(User).filter(User.email == form.email.data).first()
+        if user is not None:
+            return render_template('profile.html',
+                                   message="This email already used",
+                                   form=form,
+                                   version=random.randint(0, 10 ** 5))
+        if form.new_password.data != form.new_password_rep.data:
+            return render_template('profile.html',
+                                   message="Passwords don't match",
+                                   form=form,
+                                   version=random.randint(0, 10 ** 5))
+        user = session.query(User).filter(User.id == current_user.id).first()
+        if form.login.data != '':
+            user.login = form.login.data
+        if form.email.data != '':
+            user.email = form.email.data
+        if form.new_password.data != '':
+            user.hashed_password = current_user.hash(form.new_password.data)
+        session.commit()
+        return redirect("/start")
+    return render_template('profile.html', title='Authorisation', form=form, version=random.randint(0, 10 ** 5))
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -88,15 +128,15 @@ def add_pass():
         session = db_session.create_session()
         tags_id = []
         for tag in form.tags.data.split():
-            old_tag_id = session.query(Tag).filter(Tag.tag == tag).first()
-            if old_tag_id is None:
+            old_tag = session.query(Tag).filter(Tag.tag == tag).first()
+            if old_tag is None:
                 new_tag = Tag()
                 new_tag.tag = tag
                 session.add(new_tag)
                 session.commit()
-                tags_id.append(session.query(Tag).filter(Tag.tag == tag).first())
+                tags_id.append(session.query(Tag).filter(Tag.tag == tag).first().id)
             else:
-                tags_id.append(old_tag_id)
+                tags_id.append(old_tag.id)
         password = Password()
         password.user_id = current_user.id
         password.site = form.site.data

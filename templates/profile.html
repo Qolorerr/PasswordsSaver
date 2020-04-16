@@ -29,16 +29,24 @@
     </div>
     <div class="input_cont">
     <p>
-        {{ form.password(class="form", method="", action="", autocomplete="off", type="password", id="pass",  placeholder="new password") }}<br>
+        {{ form.password(class="form", method="", action="", autocomplete="on", type="password", id="pass",  placeholder="old password") }}<br>
         {% for error in form.password.errors %}
             <div class="message">
                 {{ error }}
             </div>
         {% endfor %}
     </p>
+        <p>
+        {{ form.new_password(class="form", method="", action="", autocomplete="off", type="password", id="new_pass",  placeholder="new password") }}<br>
+        {% for error in form.new_password.errors %}
+            <div class="message">
+                {{ error }}
+            </div>
+        {% endfor %}
+    </p>
     <p>
-        {{ form.password_rep(class="form", method="", action="", autocomplete="off", type="password", id="rep_pass", placeholder="repeat password") }}<br>
-        {% for error in form.password_rep.errors %}
+        {{ form.new_password_rep(class="form", method="", action="", autocomplete="off", type="password", id="rep_new_pass", placeholder="repeat password") }}<br>
+        {% for error in form.new_password_rep.errors %}
             <div class="message">
                 {{ error }}
             </div>
