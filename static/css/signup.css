@@ -14,6 +14,16 @@ body{
     text-align: center;
 }
 
+.helper {
+    font-family: 'Montserrat', sans-serif;
+    color: #8C8C8C;
+}
+
+.help_cont {
+    width: 300px;
+    margin: auto;
+}
+
 .btn {
   border: 0px solid;
   margin: auto;
@@ -73,6 +83,12 @@ body{
 	margin-top: 4%;
 	font-size: 40px;
 }
+
+.help_cont {
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+
 p.btn_cont{
     width: 90%;
     margin: auto;
