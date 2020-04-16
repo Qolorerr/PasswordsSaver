@@ -6,12 +6,12 @@
         <link rel="stylesheet" type="text/css" href="static/css/signup.css? update = {{ version }}">
 </head>
 <body>
-<h5 class="banner">Sign Up</h5>
+<h5 class="banner">Sign In</h5>
 <form action="" method="post">
     {{ form.hidden_tag() }}
     <div class="input_cont">
     <p>
-        {{ form.login(class="form", method="", action="", autocomplete="off", type="text", id="name", placeholder="username") }}<br>
+        {{ form.login(class="form", method="", action="", autocomplete="on", type="text", id="name", placeholder="username") }}<br>
         {% for error in form.login.errors %}
             <div class="message">
                 {{ error }}
@@ -19,7 +19,7 @@
         {% endfor %}
     </p>
     <p>
-        {{ form.password(class="form", method="", action="", autocomplete="off", type="password", id="pass", placeholder="password") }}<br>
+        {{ form.password(class="form", method="", action="", autocomplete="on", type="password", id="pass", placeholder="password") }}<br>
         {% for error in form.password.errors %}
             <div class="message">
                 {{ error }}
@@ -27,6 +27,7 @@
         {% endfor %}
     </p>
     </div>
+    <div class="help_cont"><a class="helper" href="signup">sign up</a></div>
     <p class="btn_cont">{{ form.submit(type="submit", class="btn")}}</p>
     <div class="message">{{ message }}</div>
 </form>

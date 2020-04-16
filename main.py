@@ -76,6 +76,39 @@ def login():
     return render_template('login.html', title='Authorisation', form=form, version=random.randint(0, 10 ** 5))
 
 
+@app.route('/profile', methods=['GET', 'POST'])
+def change_prof():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        session = db_session.create_session()
+        user = session.query(User).filter(User.login == form.login.data).first()
+        if user is not None:
+            return render_template('profile.html',
+                                   message="This login already used",
+                                   form=form,
+                                   version=random.randint(0, 10 ** 5))
+        user = session.query(User).filter(User.email == form.email.data).first()
+        if user is not None:
+            return render_template('profile.html',
+                                   message="This email already used",
+                                   form=form,
+                                   version=random.randint(0, 10 ** 5))
+        if form.password.data != form.password_rep.data:
+            return render_template('profile.html',
+                                   message="Passwords don't match",
+                                   form=form,
+                                   version=random.randint(0, 10 ** 5))
+        user = User()
+        user.login = form.login.data
+        user.email = form.email.data
+        user.hashed_password = user.hash(form.password.data)
+        session.add(user)
+        session.commit()
+        login_user(user, remember=False)
+        return redirect("/start")
+    return render_template('profile.html', title='Authorisation', form=form, email="сделай почту здесь", username="сделай логин тут", version=random.randint(0, 10 ** 5))
+
+
 @app.route('/logout')
 @login_required
 def logout():
@@ -92,9 +125,17 @@ def start():
     return response
 
 
+@app.route('/list')
+def pass_list():
+    response = make_response(render_template("pass_list.html", version=random.randint(0, 10 ** 5)))
+    response.headers['Cache-Control'] = 'no-cache, no-store'
+    response.headers['Pragma'] = 'no-cache'
+    return response
+
+
 def main():
     db_session.global_init("db/passwords.sqlite")
-    app.run(port=5000, host='127.0.0.1')
+    app.run(port=5000, host='192.168.1.114')
 
 
 if __name__ == '__main__':
