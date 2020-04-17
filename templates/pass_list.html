@@ -10,7 +10,14 @@
 <p>
     <h4 class="banner">Your passwords</h4></p>
 <form action="" method="post"><p>
-    <div class="input_cont">{{ form.tags(class="form", method="", action="", autocomplete="off", type="text", id="name", placeholder="enter tags and press enter")}}</div>
+    {{ form.hidden_tag() }}
+    <div class="input_cont">{{ form.tags(class="form", method="", action="", autocomplete="off", type="text", id="tags", placeholder="enter tags or site")}}</div>
 </p></form>
+{% if sites == [] %}
+<div><h5 class="message">You don't have saved passwords</h5></div>
+{% endif %}
+{% for site in sites %}
+<p class="btn_cont"><button class="btn" type="submit" id="{{ site['id'] }}">{{ site['site'] }}</button></p>
+        {% endfor %}
 </body>
 </html>

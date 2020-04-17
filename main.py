@@ -141,7 +141,7 @@ def add_pass():
         password.user_id = current_user.id
         password.site = form.site.data
         password.hashed_password = form.password.data
-        password.tags_id = ' '.join([str(i) for i in tags_id])
+        password.tags_id = " " + ' '.join([str(i) for i in tags_id]) + " "
         session.add(password)
         session.commit()
         return redirect('/start')
@@ -167,15 +167,33 @@ def start():
 @app.route('/passwords_list', methods=['GET', 'POST'])
 @login_required
 def password_list():
+    site_list = []
     form = SearchForm()
-    if form.validate():
-        tags = form.tags.data.split()
-    return render_template('pass_list.html', form=form, version=random.randint(0, 10 ** 5))
+    session = db_session.create_session()
+    if form.validate_on_submit():
+        info = form.tags.data.split()
+        id_list = []
+        for tag in info:
+            id = session.query(Tag).filter(Tag.tag == tag).first()
+            site = session.query(Password).filter(Password.site == tag, Password.user_id == current_user.id).first()
+            if id is not None:
+                id_list.append(id.id)
+            elif site is not None:
+                site_list.append({"site": site.site, "id": site.id})
+        for id in id_list:
+            site = session.query(Password).filter(Password.user_id == current_user.id, Password.tags_id.like("% " + str(id) + " %")).first()
+            print(site)
+            if site is not None:
+                site_list.append({"site": site.site, "id": site.id})
+    if site_list == []:
+        print(site_list)
+        site_list = list(map(lambda x: {"site": x.site, "id": x.id}, list(session.query(Password).filter(Password.user_id == current_user.id).all())))
+    return render_template('pass_list.html', form=form, sites=site_list, version=random.randint(0, 10 ** 5))
 
 
 def main():
     db_session.global_init("db/passwords.sqlite")
-    app.run(port=5000, host='127.0.0.1')
+    app.run(port=5000, host='192.168.1.114')
 
 
 if __name__ == '__main__':

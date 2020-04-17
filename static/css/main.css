@@ -60,10 +60,10 @@ p.btn_cont {
 		text-align: center;
 	}
 	.banner {
-		width: 90%;
+		width: 80%;
 		text-align: center;
 		margin: auto;
-		margin-top: 7%;
-		font-size: 65px;
+		margin-top: 4%;
+		font-size: 90px;
 	}
 }
