@@ -1,10 +1,9 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_login import LoginManager, login_required, logout_user, login_user, current_user
 from flask_restful import Api
 from werkzeug.utils import redirect
 from flask import render_template
 from flask import make_response
-
 from data import db_session
 from data.add_pass_form import AddPasswordForm
 from data.login_form import LoginForm
@@ -14,7 +13,7 @@ from data.register_form import RegisterForm
 from data.tags import Tag
 from data.users import User
 from data.search_password_form import SearchForm
-
+from data.show_password_form import ShowPasswordForm
 import random
 
 app = Flask(__name__)
@@ -179,16 +178,34 @@ def password_list():
             if id is not None:
                 id_list.append(id.id)
             elif site is not None:
-                site_list.append({"site": site.site, "id": site.id})
+                site_list.append({"site": site.site, "id": str(site.id)})
         for id in id_list:
             site = session.query(Password).filter(Password.user_id == current_user.id, Password.tags_id.like("% " + str(id) + " %")).first()
             print(site)
             if site is not None:
-                site_list.append({"site": site.site, "id": site.id})
+                site_list.append({"site": site.site, "id": str(site.id)})
     if not site_list:
-        print(site_list)
-        site_list = list(map(lambda x: {"site": x.site, "id": x.id}, list(session.query(Password).filter(Password.user_id == current_user.id).all())))
+        site_list = list(map(lambda x: {"site": x.site, "id": str(x.id)}, list(session.query(Password).filter(Password.user_id == current_user.id).all())))
     return render_template('pass_list.html', form=form, sites=site_list, version=random.randint(0, 10 ** 5))
+
+
+@app.route('/passwords_list/<int:id>', methods=['GET', 'POST'])
+@login_required
+def show_password(id):
+    form = ShowPasswordForm()
+    session = db_session.create_session()
+    password = session.query(Password).filter(Password.id == id, Password.user_id == current_user.id).first()
+    if password is not None:
+        site = password.site
+        tags_id = password.tags_id.split()
+        tags = ""
+        for i in tags_id:
+            tags += session.query(Tag).filter(Tag.id == i).first().tag + " "
+    else:
+        return redirect('/passwords_list')
+    if form.validate_on_submit():
+        pass  # Misha, write send password in email
+    return render_template('show_password.html', form=form, site=site, tags=tags, version=random.randint(0, 10 ** 5))
 
 
 def main():
