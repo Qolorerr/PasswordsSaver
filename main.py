@@ -185,7 +185,7 @@ def password_list():
             print(site)
             if site is not None:
                 site_list.append({"site": site.site, "id": site.id})
-    if not site_list:
+    if site_list == []:
         print(site_list)
         site_list = list(map(lambda x: {"site": x.site, "id": x.id}, list(session.query(Password).filter(Password.user_id == current_user.id).all())))
     return render_template('pass_list.html', form=form, sites=site_list, version=random.randint(0, 10 ** 5))
@@ -193,7 +193,7 @@ def password_list():
 
 def main():
     db_session.global_init("db/passwords.sqlite")
-    app.run(port=5000, host='127.0.0.1')
+    app.run(port=5000, host='192.168.1.114')
 
 
 if __name__ == '__main__':
