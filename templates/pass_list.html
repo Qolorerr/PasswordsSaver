@@ -17,7 +17,8 @@
 <div><h5 class="message">You don't have saved passwords</h5></div>
 {% endif %}
 {% for site in sites %}
-<p class="btn_cont"><button class="btn" type="submit" id="{{ site['id'] }}">{{ site['site'] }}</button></p>
+    {{ form.hidden_tag() }}
+<p class="btn_cont"><a class="btn" type="submit" href="passwords_list/{{ site['id'] }}">{{ site['site'] }}</a></p>
         {% endfor %}
 </body>
 </html>
