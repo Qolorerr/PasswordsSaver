@@ -14,6 +14,7 @@ from data.tags import Tag
 from data.users import User
 from data.search_password_form import SearchForm
 from data.show_password_form import ShowPasswordForm
+from data.encryption import encryption, decryption, init_encryption
 import random
 
 app = Flask(__name__)
@@ -23,6 +24,8 @@ api = Api(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+init_encryption()
 
 
 @login_manager.user_loader
@@ -139,7 +142,7 @@ def add_pass():
         password = Password()
         password.user_id = current_user.id
         password.site = form.site.data
-        password.hashed_password = form.password.data
+        password.hashed_password = encryption(form.password.data)
         password.tags_id = " " + ' '.join([str(i) for i in tags_id]) + " "
         session.add(password)
         session.commit()
@@ -204,7 +207,8 @@ def show_password(id):
     else:
         return redirect('/passwords_list')
     if form.validate_on_submit():
-        pass  # Misha, write send password in email
+        password = decryption(session.query(Password).filter(Password.id == id, Password.user_id == current_user.id).first().hashed_password)
+        # Misha, send this password in email
     return render_template('show_password.html', form=form, site=site, tags=tags, version=random.randint(0, 10 ** 5))
 
 
