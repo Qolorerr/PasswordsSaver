@@ -10,6 +10,7 @@ from data.login_form import LoginForm
 from data.passwords import Password
 from data.profile_form import ProfileForm
 from data.register_form import RegisterForm
+from data.send_mail import send_password
 from data.tags import Tag
 from data.users import User
 from data.search_password_form import SearchForm
@@ -207,8 +208,11 @@ def show_password(id):
     else:
         return redirect('/passwords_list')
     if form.validate_on_submit():
+        site = password.site
+        user_id = password.user_id
+        email = session.query(User).filter(User.id == user_id).first().email
         password = decryption(session.query(Password).filter(Password.id == id, Password.user_id == current_user.id).first().hashed_password)
-        # Misha, send this password in email
+        send_password(email, site, password)
     return render_template('show_password.html', form=form, site=site, tags=tags, version=random.randint(0, 10 ** 5))
 
 
