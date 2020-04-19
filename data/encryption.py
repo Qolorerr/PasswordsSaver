@@ -3,7 +3,7 @@ from cryptography.fernet import Fernet
 
 def init_encryption():
     global cipher
-    cipher = Fernet(open('db/key.txt', 'r').read())
+    cipher = Fernet(bytes(open("db/key.txt", 'r').read().encode("UTF-8")))
 
 
 def encryption(text):
