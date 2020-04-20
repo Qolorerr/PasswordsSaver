@@ -263,6 +263,19 @@ def show_auth_qr():
     return render_template('show_auth_qr.html', form=form, qr_url=path)
 
 
+def show_auth_qr_mobile():
+    form = ShowAuthQRForm()
+    if form.validate_on_submit():
+        return redirect('/start')
+
+    key = current_user.authenticator_key
+    if key is None:
+        return redirect('/add_authenticator')
+
+    data = 'PasswordsSaver:' + current_user.email
+    return key, data
+
+
 def main():
     db_session.global_init("db/passwords.sqlite")
     app.run(port=5000, host='127.0.0.1')
