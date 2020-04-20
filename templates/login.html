@@ -26,6 +26,14 @@
             </div>
         {% endfor %}
     </p>
+    <p>
+        {{ form.code(class="form", method="", action="", autocomplete="off", type="code", id="code",  placeholder="Auth code") }}<br>
+        {% for error in form.code.errors %}
+            <div class="message">
+                {{ error }}
+            </div>
+        {% endfor %}
+    </p>
     </div>
     <div class="help_cont"><a class="helper" href="signup">sign up</a></div>
     <p class="btn_cont">{{ form.submit(type="submit", class="btn")}}</p>

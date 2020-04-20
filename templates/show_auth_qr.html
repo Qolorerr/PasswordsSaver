@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Authenticator qr - PasswordsSaver</title>
+        <link rel="stylesheet" type="text/css" href="/static/css/signup.css? update = {{ version }}">
+</head>
+<body>
+<h5 class="banner">Scan this QR</h5>
+{% if qr_url %}
+<br>
+<img src="{{ qr_url }}">
+{% endif %}
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+<p class="btn_cont">{{ form.submit(type="submit", class="btn", value="OK")}}</p>
+</form>
+</body>
+</html>

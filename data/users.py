@@ -11,6 +11,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     login = sqlalchemy.Column(sqlalchemy.String)
     email = sqlalchemy.Column(sqlalchemy.String, unique=True)
     hashed_password = sqlalchemy.Column(sqlalchemy.String)
+    authenticator_key = sqlalchemy.Column(sqlalchemy.String)
 
     def check_password(self, password):
         h = hashlib.sha3_512()

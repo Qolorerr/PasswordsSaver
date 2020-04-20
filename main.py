@@ -1,3 +1,9 @@
+import os
+import time
+import urllib
+
+import pyotp
+import pyqrcode
 from flask import Flask, jsonify, request
 from flask_login import LoginManager, login_required, logout_user, login_user, current_user
 from flask_restful import Api
@@ -11,6 +17,7 @@ from data.passwords import Password
 from data.profile_form import ProfileForm
 from data.register_form import RegisterForm
 from data.send_mail import send_password
+from data.show_auth_qr_form import ShowAuthQRForm
 from data.tags import Tag
 from data.users import User
 from data.search_password_form import SearchForm
@@ -114,6 +121,13 @@ def login():
         session = db_session.create_session()
         user = session.query(User).filter((User.login == form.login.data) | (User.email == form.login.data)).first()
         if user and user.check_password(form.password.data):
+            if user.authenticator_key is not None:
+                totp = pyotp.TOTP(user.authenticator_key)
+                if not totp.verify(form.code.data):
+                    return render_template('login.html',
+                                           message="Wrong auth code",
+                                           form=form,
+                                           version=random.randint(0, 10 ** 5))
             login_user(user, remember=form.remember_me.data)
             return redirect("/start")
         return render_template('login.html',
@@ -214,6 +228,39 @@ def show_password(id):
         password = decryption(session.query(Password).filter(Password.id == id, Password.user_id == current_user.id).first().hashed_password)
         send_password(email, site, password)
     return render_template('show_password.html', form=form, site=site, tags=tags, version=random.randint(0, 10 ** 5))
+
+
+@app.route('/add_authenticator', methods=['GET', 'POST'])
+@login_required
+def add_authenticator():
+    if current_user.authenticator_key is None:
+        session = db_session.create_session()
+        user = session.query(User).filter(User.id == current_user.id).first()
+        user.authenticator_key = pyotp.random_base32()
+        session.commit()
+    return redirect('/show_auth_qr')
+
+
+@app.route('/show_auth_qr', methods=['GET', 'POST'])
+@login_required
+def show_auth_qr():
+    path = 'static/img/qr{}.png'.format(str(current_user.id))
+    form = ShowAuthQRForm()
+    if form.validate_on_submit():
+        os.remove(path)
+        return redirect('/start')
+
+    key = current_user.authenticator_key
+    if key is None:
+        return redirect('/add_authenticator')
+
+    data = 'PasswordsSaver:' + current_user.email
+    url = pyotp.totp.TOTP(key).provisioning_uri(name=data)
+    url = urllib.parse.unquote(url)
+    big_code = pyqrcode.create(url)
+    big_code.png(path, scale=6, module_color=[255, 255, 255, 255], background=[46, 46, 46, 255])
+    time.sleep(1)
+    return render_template('show_auth_qr.html', form=form, qr_url=path)
 
 
 def main():
