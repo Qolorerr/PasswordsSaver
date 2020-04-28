@@ -24,6 +24,10 @@ body{
     margin: auto;
 }
 
+img {
+    margin: auto;
+}
+
 .btn {
   display: block;
   border: 0px solid;

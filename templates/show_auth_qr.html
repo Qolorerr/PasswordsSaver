@@ -9,7 +9,8 @@
 <h5 class="banner">Scan this QR</h5>
 {% if qr_url %}
 <br>
-<img src="{{ qr_url }}">
+<div class="btn_cont">
+    <img src="{{ qr_url }}"></div>
 {% endif %}
 <form action="" method="post">
     {{ form.hidden_tag() }}
