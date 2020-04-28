@@ -12,6 +12,7 @@ from flask import render_template
 from flask import make_response
 from data import db_session
 from data.add_pass_form import AddPasswordForm
+from data.edit_password_form import EditPasswordForm
 from data.login_form import LoginForm
 from data.passwords import Password
 from data.profile_form import ProfileForm
@@ -227,7 +228,54 @@ def show_password(id):
         email = session.query(User).filter(User.id == user_id).first().email
         password = decryption(session.query(Password).filter(Password.id == id, Password.user_id == current_user.id).first().hashed_password)
         send_password(email, site, password)
-    return render_template('show_password.html', form=form, site=site, tags=tags, version=random.randint(0, 10 ** 5))
+    return render_template('show_password.html', form=form, site=site, tags=tags, id=id, version=random.randint(0, 10 ** 5))
+
+
+@app.route('/passwords_list/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_password(id):
+    form = EditPasswordForm()
+    session = db_session.create_session()
+    password = session.query(Password).filter(Password.id == id, Password.user_id == current_user.id).first()
+    if password is None:
+        return redirect('/passwords_list')
+    if form.validate_on_submit():
+        if current_user.hash(form.acc_password.data) != current_user.hashed_password:
+            return render_template('profile.html',
+                                   message="Wrong old password",
+                                   form=form,
+                                   version=random.randint(0, 10 ** 5))
+        if form.site.data != '':
+            password.site = form.site.data
+        if form.password.data != '':
+            password.hashed_password = encryption(form.password.data)
+        if form.tags.data != '':
+            tags_id = []
+            for tag in form.tags.data.split():
+                old_tag = session.query(Tag).filter(Tag.tag == tag).first()
+                if old_tag is None:
+                    new_tag = Tag()
+                    new_tag.tag = tag
+                    session.add(new_tag)
+                    session.commit()
+                    tags_id.append(session.query(Tag).filter(Tag.tag == tag).first().id)
+                else:
+                    tags_id.append(old_tag.id)
+            password.tags_id = " " + ' '.join([str(i) for i in tags_id]) + " "
+        session.commit()
+        return redirect('/passwords_list/{}'.format(str(id)))
+    return render_template('edit_pass.html', form=form, version=random.randint(0, 10 ** 5))
+
+
+@app.route('/passwords_list/delete/<int:id>')
+@login_required
+def delete_password(id):
+    session = db_session.create_session()
+    password = session.query(Password).filter(Password.id == id, Password.user_id == current_user.id).first()
+    if password is not None:
+        session.delete(password)
+        session.commit()
+    return redirect('/passwords_list')
 
 
 @app.route('/add_authenticator', methods=['GET', 'POST'])

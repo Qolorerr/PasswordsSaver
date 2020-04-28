@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Edit Password - PasswordsSaver</title>
+        <link rel="stylesheet" type="text/css" href="static/css/signup.css? update = {{ version }}">
+</head>
+<body>
+<h5 class="banner">Edit Password</h5>
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    <div class="input_cont">
+    <p>
+        {{ form.site(class="form", method="", action="", autocomplete="on", type="text", id="name", placeholder="site") }}<br>
+        {% for error in form.site.errors %}
+            <div class="message">
+                {{ error }}
+            </div>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.password(class="form", method="", action="", autocomplete="on", type="text", id="password", placeholder="password") }}<br>
+        {% for error in form.password.errors %}
+            <div class="message">
+                {{ error }}
+            </div>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.tags(class="form", method="", action="", autocomplete="on", type="text", id="text", placeholder="tags") }}<br>
+        {% for error in form.tags.errors %}
+            <div class="message">
+                {{ error }}
+            </div>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.acc_password(class="form", method="", action="", autocomplete="on", type="text", id="password", placeholder="account password") }}<br>
+        {% for error in form.acc_password.errors %}
+            <div class="message">
+                {{ error }}
+            </div>
+        {% endfor %}
+    </p>
+    </div>
+    <p class="btn_cont">{{ form.submit(type="submit", class="btn")}}</p>
+    <div class="message">{{ message }}</div>
+</form>
+</body>
