@@ -3,9 +3,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Edit Password - PasswordsSaver</title>
-        <link rel="stylesheet" type="text/css" href="static/css/signup.css? update = {{ version }}">
+        <link rel="stylesheet" type="text/css" href="/static/css/signup.css? update = {{ version }}">
 </head>
 <body>
+<a href="/passwords_list/{{ id }}" class="back">⤺</a>
 <h5 class="banner">Edit Password</h5>
 <form action="" method="post">
     {{ form.hidden_tag() }}

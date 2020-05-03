@@ -6,6 +6,7 @@
         <link rel="stylesheet" type="text/css" href="static/css/signup.css? update = {{ version }}">
 </head>
 <body>
+<a href="start" class="back">⤺</a>
 <h5 class="banner">Add Password</h5>
 <form action="" method="post">
     {{ form.hidden_tag() }}
@@ -36,7 +37,7 @@
     </p>
     </div>
     <div>
-    <p class="btn_cont">{{ form.submit(type="submit", class="btn")}}</p>
+    <p class="btn_cont">{{ form.submit(type="submit", class="btn")}}</p></div>
     <div class="message">{{ message }}</div>
 </form>
 </body>

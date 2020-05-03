@@ -1,10 +1,13 @@
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
+from flask import render_template
+import random
 
 
 def send_password(email, site, password):
-    message = "PasswordsSaver\r\nSITE: {}\r\nPASSWORD: {}\r\nIf it’s not you, then it’s worth considering".format(site, password)
+    message = "PasswordsSaver\r\nSITE: {}\r\nPASSWORD: {}\r\nIf it’s not you, then it’s worth considering".format(site,
+                                                                                                                  password)
     subject = "Access to password"
     send_mail(email, subject, message)
 

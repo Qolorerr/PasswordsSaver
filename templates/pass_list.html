@@ -7,12 +7,12 @@
 <link rel="stylesheet" type="text/css" href="static/css/signup.css? update = {{ version }}">
 </head>
 <body>
-<p>
+<a href="start" class="back">⤺</a>
     <h4 class="banner">Your passwords</h4></p>
 <form action="" method="post"><p>
     {{ form.hidden_tag() }}
     <div class="input_cont">{{ form.tags(class="form", method="", action="", autocomplete="off", type="text", id="tags", placeholder="enter tags or site")}}</div>
-</p></form>
+</form>
 {% if sites == [] %}
 <div><h5 class="message">You don't have saved passwords</h5></div>
 {% endif %}

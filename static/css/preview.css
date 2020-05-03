@@ -1,0 +1,137 @@
+body{
+    background: #2e2e2e;
+}
+
+img {
+    height: 70%;
+
+}
+.pr_text {
+    resize: none;
+    border: none;
+    margin-bottom: 200px;
+    height: 310px;
+    width: 300px;
+    background: #2e2e2e;
+    color: white;
+    font-size: 20px;
+}
+
+.left_text {
+    margin: auto;
+    transform: translate(+50%)
+}
+
+.right_text {
+    margin: auto;
+    transform: translate(-50%)
+}
+
+.banner {
+	color: rgb(255, 255, 255);
+	font-family: 'Montserrat', sans-serif;
+	margin: 30px auto 0;
+	margin-bottom: 50px;
+	width: 400px;
+	font-size: 40px;
+	text-align: center;
+	text-transform: uppercase
+}
+
+.img_cont_left {
+    margin: auto;
+    height: 800px;
+    transform: translate(+50%)
+}
+
+.img_cont_right {
+    margin: auto;
+    height: 800px;
+    transform: translate(-50%)
+}
+
+.block {
+    margin-bottom: -230px;
+    display:flex;
+    flex-direction:row;
+    justify-content: space-between;
+}
+
+.btn {
+  text-decoration: none;
+  outline: none;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 15px;
+  margin-bottom: 10px;
+  padding-top: 20px;
+  width: 400px;
+  height: 70px;
+  line-height: 45px;
+  border-radius: 45px;
+  vertical-align: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 30px;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 2px;
+  font-weight: 600;
+  color: white;
+  background: #323232;
+  box-shadow: 0 10px 15px rgba(0,0,0,.1);
+  transition: .3s;
+}
+.btn:hover {
+  background: #424242;
+  box-shadow: 0 15px 20px rgba(0, 0, 0, .5);
+  color: white;
+  transform: translateY(-7px);
+}
+
+@media (max-width: 1200px) {
+    .banner {
+    	width: 95%;
+	    margin-top: 4%;
+	    font-size: 40px;
+    }
+    p.btn_cont{
+        width: 100%;
+    }
+    .btn {
+        margin: auto;
+	    width: 100%;
+	    margin-top: 8%;
+	    height: 70px;
+	    border-radius: 50px;
+    	font-size: 35px;
+	    padding-top: 10px;
+	    text-align: center;
+    }
+    .img_cont_left {
+        visibility: hidden;
+        display: none;
+    }
+
+    .img_cont_right {
+        visibility: hidden;
+        display: none;
+    }
+    .right_text {
+        all: initial;
+    }
+    .left_text {
+        all: initial;
+    }
+    .pr_text {
+        margin: auto;
+        width: 90%;
+    }
+    .block {
+        all: initial;
+    }
+    img {
+        visibility: hidden;
+        display: none;
+    }
+}

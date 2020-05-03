@@ -4,7 +4,7 @@ import urllib
 
 import pyotp
 import pyqrcode
-from flask import Flask, jsonify, request
+from flask import Flask
 from flask_login import LoginManager, login_required, logout_user, login_user, current_user
 from flask_restful import Api
 from werkzeug.utils import redirect
@@ -182,6 +182,11 @@ def start():
     return response
 
 
+@app.route('/')
+def preview():
+    return render_template('preview.html', version=random.randint(0, 10 ** 5))
+
+
 @app.route('/passwords_list', methods=['GET', 'POST'])
 @login_required
 def password_list():
@@ -264,7 +269,7 @@ def edit_password(id):
             password.tags_id = " " + ' '.join([str(i) for i in tags_id]) + " "
         session.commit()
         return redirect('/passwords_list/{}'.format(str(id)))
-    return render_template('edit_pass.html', form=form, version=random.randint(0, 10 ** 5))
+    return render_template('edit_pass.html', form=form, id=id, version=random.randint(0, 10 ** 5))
 
 
 @app.route('/passwords_list/delete/<int:id>')
