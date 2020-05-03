@@ -43,6 +43,11 @@ def load_user(user_id):
     return session.query(User).get(user_id)
 
 
+@login_manager.unauthorized_handler
+def unauthorized():
+    return redirect('/login')
+
+
 @app.route('/signup', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
