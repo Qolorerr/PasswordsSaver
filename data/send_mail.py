@@ -1,8 +1,6 @@
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
-from flask import render_template
-import random
 
 
 def send_password(email, site, password):

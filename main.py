@@ -1,6 +1,7 @@
 import os
 import time
 import urllib
+from smtplib import SMTPRecipientsRefused
 
 import pyotp
 import pyqrcode
@@ -17,7 +18,7 @@ from data.login_form import LoginForm
 from data.passwords import Password
 from data.profile_form import ProfileForm
 from data.register_form import RegisterForm
-from data.send_mail import send_password
+from data.send_mail import send_password, send_mail
 from data.show_auth_qr_form import ShowAuthQRForm
 from data.tags import Tag
 from data.users import User
@@ -65,6 +66,13 @@ def register():
                                    message="This email already used",
                                    form=form,
                                    version=random.randint(0, 10 ** 5))
+        try:
+            send_mail(form.email.data, 'Mail connection', 'All your passwords will be sent here')
+        except SMTPRecipientsRefused:
+            return render_template('register.html',
+                                   message="This email doesn't exists",
+                                   form=form,
+                                   version=random.randint(0, 10 ** 5))
         if form.password.data != form.password_rep.data:
             return render_template('register.html',
                                    message="Passwords don't match",
@@ -103,6 +111,14 @@ def profile():
                                    message="This email already used",
                                    form=form,
                                    version=random.randint(0, 10 ** 5))
+        if form.email.data != '':
+            try:
+                send_mail(form.email.data, 'Mail connection', 'All your passwords will be sent here')
+            except SMTPRecipientsRefused:
+                return render_template('profile.html',
+                                       message="This email doesn't exists",
+                                       form=form,
+                                       version=random.randint(0, 10 ** 5))
         if form.new_password.data != form.new_password_rep.data:
             return render_template('profile.html',
                                    message="Passwords don't match",
