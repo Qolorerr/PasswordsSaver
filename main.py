@@ -1,6 +1,9 @@
 import os
 import time
 import urllib
+from os import listdir, stat, remove
+from threading import Timer
+from time import mktime, localtime
 from smtplib import SMTPRecipientsRefused
 
 import pyotp
@@ -143,7 +146,7 @@ def login():
         session = db_session.create_session()
         user = session.query(User).filter((User.login == form.login.data) | (User.email == form.login.data)).first()
         if user and user.check_password(form.password.data):
-            if user.authenticator_key is not None:
+            if user.authenticator_key is not None and user.authenticator_key[0] != '$':
                 totp = pyotp.TOTP(user.authenticator_key)
                 if not totp.verify(form.code.data):
                     return render_template('login.html',
@@ -307,10 +310,10 @@ def delete_password(id):
 @app.route('/add_authenticator', methods=['GET', 'POST'])
 @login_required
 def add_authenticator():
-    if current_user.authenticator_key is None:
+    if current_user.authenticator_key is None or current_user.authenticator_key[0] == '$':
         session = db_session.create_session()
         user = session.query(User).filter(User.id == current_user.id).first()
-        user.authenticator_key = pyotp.random_base32()
+        user.authenticator_key = '$' + pyotp.random_base32()
         session.commit()
     return redirect('/show_auth_qr')
 
@@ -319,22 +322,40 @@ def add_authenticator():
 @login_required
 def show_auth_qr():
     path = 'static/img/qr{}.png'.format(str(current_user.id))
+    key = current_user.authenticator_key
     form = ShowAuthQRForm()
     if form.validate_on_submit():
-        os.remove(path)
+        if key[0] == '$':
+            session = db_session.create_session()
+            user = session.query(User).filter(User.id == current_user.id).first()
+            user.authenticator_key = key[1:]
+            session.commit()
         return redirect('/start')
 
-    key = current_user.authenticator_key
     if key is None:
         return redirect('/add_authenticator')
-
+    if key[0] == '$':
+        key = key[1:]
     data = 'PasswordsSaver:' + current_user.email
     url = pyotp.totp.TOTP(key).provisioning_uri(name=data)
     url = urllib.parse.unquote(url)
     big_code = pyqrcode.create(url)
     big_code.png(path, scale=6, module_color=[255, 255, 255, 255], background=[46, 46, 46, 255])
     time.sleep(1)
+    timer = Timer(300, cleaner)
+    timer.start()
     return render_template('show_auth_qr.html', form=form, qr_url=path)
+
+
+def cleaner():
+    path = 'static/img'
+    files = listdir(path)
+    for file in files:
+        if 'qr' in file and '.png' in file:
+            file_path = path + '/' + file
+            mtime = stat(file_path).st_mtime
+            if (mktime(localtime()) - mtime) // 60 >= 5:
+                remove(file_path)
 
 
 def show_auth_qr_mobile():
